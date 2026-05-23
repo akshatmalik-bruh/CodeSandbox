@@ -5,6 +5,7 @@ import helmet from "helmet";
 import connectDB from "./Database/connections.js";
 import authRoutes from "./Auth/auth.routes.js";
 import repoRoutes from "./Repo/repo.routes.js";
+import sandboxRoutes from "./SandBoxes/sandbox.routes.js";
 
 const app = express();
 app.use(cors());
@@ -21,8 +22,9 @@ app.get("/", (req, res) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/repo", repoRoutes);
+app.use("/api/sandbox", sandboxRoutes);
 
 app.listen(Port, () => {
     console.log(`Listening on Port : ${Port}`);
 });
-
+

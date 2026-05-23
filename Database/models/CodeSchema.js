@@ -11,6 +11,10 @@ const CodeSchema = mongoose.Schema({
         ref : "Repo",
         required : true
     } , 
+    name : {
+        type : String,
+        required : true
+    } , 
     code : {
         type : String,
         required : true
