@@ -19,32 +19,30 @@ export const save = async (
 
     const existingCode = await Code.findOne({
         userId,
-        repoid: repoId,
-        name,
+        repoId: repo._id,
+        filename: name,
         language
     });
 
-   
-
     if (existingCode) {
-        if (sourceCode !== undefined) {
-            existingCode.code = sourceCode;
-        }
-
-        
-
-        return await existingCode.save();
+        throw new Error("File with same name and language already exists");
     }
 
-    const payload = {
-        userId,
-        repoid: repoId,
-        name,
-        code: sourceCode,
-        language
-    };
+    try {
+        return await Code.create({
+            userId,
+            repoId: repo._id,
+            filename: name,
+            content: sourceCode ?? "",
+            language
+        });
+    } catch (error) {
+        if (error.code === 11000) {
+            throw new Error("File with same name and language already exists");
+        }
 
-    return await Code.create(payload);
+        throw error;
+    }
 };
 
 
@@ -69,6 +67,35 @@ export const autosaveCodeService = async (
   );
 
   return updatedCode;
+};
+
+export const getFilesByRepo = async (repoId, userId) => {
+    const repo = await Repo.findOne({
+        _id: repoId,
+        userid: userId
+    });
+
+    if (!repo) {
+        throw new Error("Repository not found or unauthorized");
+    }
+
+    const files = await Code.find({
+        repoId: repo._id,
+        userId
+    }).sort({ updatedAt: -1 });
+
+    return files;
+};
+
+export const getCodeById = async (codeId, userId) => {
+    const code = await Code.findOne({
+        _id: codeId,
+        userId
+    });
+    if (!code) {
+        throw new Error("Code file not found or unauthorized");
+    }
+    return code;
 };
 
 

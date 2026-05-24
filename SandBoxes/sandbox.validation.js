@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const objectId = z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid id");
+
 export const saveValidation = z.object({
 
   repoId: z.string().min(1, "repoId is required"),
@@ -23,3 +25,26 @@ export const runValidation = z.object({
 export const autosaveSchema = z.object({
    content: z.string()
 });
+
+export const repoFilesParamsSchema = z.object({
+  repoId: objectId
+});
+
+export const codeParamsSchema = z.object({
+  codeId: objectId
+});
+
+export const paramsValidation = (schema) => {
+  return (req, res, next) => {
+    const validation = schema.safeParse(req.params);
+
+    if (!validation.success) {
+      return res.status(400).json({
+        errors: validation.error.errors.map((err) => err.message)
+      });
+    }
+
+    req.params = validation.data;
+    next();
+  };
+};

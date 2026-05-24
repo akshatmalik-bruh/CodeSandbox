@@ -1,5 +1,9 @@
-import { save } from './sandbox.services.js';
-import { autosaveCodeService } from "./code.services.js";
+import {
+  autosaveCodeService,
+  getCodeById,
+  getFilesByRepo,
+  save
+} from "./sandbox.services.js";
 
 export const saveCode = async (req, res) => {
     try {
@@ -18,7 +22,9 @@ export const saveCode = async (req, res) => {
         });
     } catch (error) {
         console.error('Sandbox save error:', error);
-        return res.status(500).json({
+        const statusCode = error.message?.includes("already exists") ? 409 : 500;
+
+        return res.status(statusCode).json({
             message: error.message || 'Failed to save code'
         });
     }
@@ -70,4 +76,52 @@ export const autosave = async (req, res) => {
 
   }
 
+};
+
+export const getFilesByRepoController = async (req, res) => {
+  try {
+    const { repoId } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    const files = await getFilesByRepo(repoId, userId);
+
+    return res.status(200).json({
+      message: "Files fetched successfully",
+      files,
+    });
+  } catch (err) {
+    return res.status(404).json({
+      message: err.message || "Failed to fetch files",
+    });
+  }
+};
+
+export const getCodeByIdController = async (req, res) => {
+  try {
+    const { codeId } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    const code = await getCodeById(codeId, userId);
+
+    return res.status(200).json({
+      message: "Code file fetched successfully",
+      code,
+    });
+  } catch (err) {
+    return res.status(404).json({
+      message: err.message || "Failed to fetch code file",
+    });
+  }
 };

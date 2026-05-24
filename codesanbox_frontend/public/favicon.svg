@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <!-- outer coding brackets -->
+  <path d="M30 25L10 50L30 75" stroke="#6366f1" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M70 25L90 50L70 75" stroke="#6366f1" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+  
+  <!-- inner core sandbox cube -->
+  <path d="M50 32L72 43L72 65L50 76L28 65L28 43L50 32Z" fill="none" stroke="#818cf8" stroke-width="6" />
+  
+  <!-- cube inside line dividers -->
+  <path d="M50 32V54M50 54L28 43M50 54L72 43" stroke="#818cf8" stroke-width="4" stroke-opacity="0.8" />
+  
+  <!-- center glowing dot -->
+  <circle cx="50" cy="54" r="5" fill="#a5b4fc" />
+</svg>

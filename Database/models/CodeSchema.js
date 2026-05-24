@@ -36,4 +36,9 @@ const CodeSchema = new mongoose.Schema(
   }
 );
 
+CodeSchema.index(
+  { userId: 1, repoId: 1, filename: 1, language: 1 },
+  { unique: true }
+);
+
 export default mongoose.model("Code", CodeSchema);

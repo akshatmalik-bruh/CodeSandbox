@@ -30,7 +30,7 @@ export const deleteRepo = async (repoId, userid) => {
         throw new Error("Repository not found or unauthorized");
     }
     await Code.deleteMany({
-        repoid: repo._id
+        repoId: repo._id
     });
     await Repo.deleteOne({
         _id: repo._id
@@ -59,3 +59,4 @@ export const updateRepo = async (repoId, userid, newRepoName) => {
         throw error;
     }
 };
+
