@@ -49,6 +49,29 @@ export const save = async (
 
 
 
+export const autosaveCodeService = async (
+  codeId,
+  userId,
+  content
+) => {
+
+  const updatedCode = await Code.findOneAndUpdate(
+    {
+      _id: codeId,
+      userId: userId,
+    },
+    {
+      content,
+    },
+    {
+      new: true,
+    }
+  );
+
+  return updatedCode;
+};
+
+
 
 
 
