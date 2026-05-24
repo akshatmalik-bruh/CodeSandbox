@@ -1,7 +1,8 @@
 import { Worker } from "bullmq";
 import { connection } from "./connection.js";
 import { updateExecutionResult } from "../SandBoxes/sandbox.services.js";
-
+import { welcomeTemplate } from "../mail/template.js";
+import { sendMail } from "../mail/sendmail.js";
 const runWorker = new Worker(
   "runQueue",
 
@@ -48,4 +49,25 @@ const runWorker = new Worker(
   {
     connection,
   }
+);
+
+const emailWorker = new Worker(
+  "emailQueue",
+  async (job) => {
+    try{
+    const { email, name } = job.data;
+   
+    const subject = "Welcome to CodeSandbox!";
+    const html = welcomeTemplate(name);
+    await sendMail({ to: email, subject, html });
+  }
+
+  catch(err){
+    console.error("Error sending email:", err);
+  }
+},
+  {
+    connection,
+  }
+
 );
