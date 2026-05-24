@@ -2,8 +2,10 @@ import {
   autosaveCodeService,
   getCodeById,
   getFilesByRepo,
-  save
+  save, Runsave , updateExecutionResult,
+  getExecutionById
 } from "./sandbox.services.js";
+import { RunQueue } from "../Queues/Queue.js";
 
 export const saveCode = async (req, res) => {
     try {
@@ -32,8 +34,26 @@ export const saveCode = async (req, res) => {
 
 export const runCode = async (req,res)=>{
     try{
-
-    }
+        const { repoId, codeId ,  codeSnapshot, language } = req.body;
+        const userId = req.user?.id;
+        if (!userId) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        const savedCode = await Runsave(userId, repoId, language, codeSnapshot, codeId);
+        if(savedCode.status == 'queued'){
+            await RunQueue.add('runCode', {
+              executionId: savedCode._id,
+              codeSnapshot,
+              language
+        })
+        
+        }
+        return res.status(200).json({
+            message: 'Code execution started',
+            exectuionId: savedCode._id
+        });
+      }
+  
     catch(err){
         return res.status(500).json({
             message: err.message || 'Failed to run code'
@@ -122,6 +142,28 @@ export const getCodeByIdController = async (req, res) => {
   } catch (err) {
     return res.status(404).json({
       message: err.message || "Failed to fetch code file",
+    });
+  }
+};
+
+export const getExecutionByIdController = async (req, res) => {
+  try {
+    const { executionId } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const execution = await getExecutionById(executionId, userId);
+
+    return res.status(200).json({
+      message: "Execution fetched successfully",
+      execution,
+    });
+  } catch (err) {
+    return res.status(404).json({
+      message: err.message || "Failed to fetch execution",
     });
   }
 };

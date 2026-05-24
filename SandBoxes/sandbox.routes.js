@@ -4,11 +4,13 @@ import {
     getCodeByIdController,
     getFilesByRepoController,
     runCode,
-    saveCode
+    saveCode,
+    getExecutionByIdController
 } from "./sandbox.controllers.js";
 import {
     autosaveSchema,
     codeParamsSchema,
+    executionParamsSchema,
     paramsValidation,
     repoFilesParamsSchema,
     runValidation,
@@ -26,4 +28,6 @@ router.get("/files/:repoId", paramsValidation(repoFilesParamsSchema), getFilesBy
 router.get("/code/:codeId", paramsValidation(codeParamsSchema), getCodeByIdController);
 router.post("/run", middlewareValidation(runValidation), runCode);
 router.patch("/autosave/:id", middlewareValidation(autosaveSchema), autosave);
+router.get("/execution/:executionId", paramsValidation(executionParamsSchema), getExecutionByIdController);
+
 export default router;

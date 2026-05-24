@@ -3,7 +3,6 @@ import { z } from "zod";
 const objectId = z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid id");
 
 export const saveValidation = z.object({
-
   repoId: z.string().min(1, "repoId is required"),
   name: z.string().min(1, "name is required"),
   code: z.string().optional(),
@@ -14,16 +13,15 @@ export const saveValidation = z.object({
 
 export const runValidation = z.object({
   repoId: z.string().min(1, "repoId is required"),
-  name: z.string().min(1, "name is required"),
-  code: z.string().min(1, "code is required"),
+  codeId: z.string().min(1, "codeId is required"),
   language: z.enum(["javascript", "python", "java", "c++"], {
     errorMap: () => ({ message: "Invalid language" })
-  })
+  }),
+  codeSnapshot: z.string().min(1, "code is required")
 });
 
-
 export const autosaveSchema = z.object({
-   content: z.string()
+  content: z.string()
 });
 
 export const repoFilesParamsSchema = z.object({
@@ -32,6 +30,10 @@ export const repoFilesParamsSchema = z.object({
 
 export const codeParamsSchema = z.object({
   codeId: objectId
+});
+
+export const executionParamsSchema = z.object({
+  executionId: objectId
 });
 
 export const paramsValidation = (schema) => {

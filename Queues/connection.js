@@ -1,16 +1,7 @@
-import { Queue, Worker } from 'bullmq';
+import { Queue } from 'bullmq';
+import IORedis from 'ioredis';
 
-
-export const myQueue = new Queue('myqueue', {
-  connection: {
-    host: 'localhost',
-    port: 6379,
-  },
+export const connection = new IORedis({
+  maxRetriesPerRequest: null
 });
 
-export const myWorker = new Worker('myqueue', async job => {}, {
-  connection: {
-    host: 'localhost',
-    port: 6379  ,
-  },
-});
