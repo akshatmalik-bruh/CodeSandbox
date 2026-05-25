@@ -6,16 +6,16 @@ export const saveValidation = z.object({
   repoId: z.string().min(1, "repoId is required"),
   name: z.string().min(1, "name is required"),
   code: z.string().optional(),
-  language: z.enum(["javascript", "python", "java", "c++"], {
-    errorMap: () => ({ message: "Invalid language" })
+  language: z.enum(["javascript", "python"], {
+    errorMap: () => ({ message: "Invalid language. Only javascript and python are supported." })
   })
 });
 
 export const runValidation = z.object({
   repoId: z.string().min(1, "repoId is required"),
   codeId: z.string().min(1, "codeId is required"),
-  language: z.enum(["javascript", "python", "java", "c++"], {
-    errorMap: () => ({ message: "Invalid language" })
+  language: z.enum(["javascript", "python"], {
+    errorMap: () => ({ message: "Invalid language. Only javascript and python are supported." })
   }),
   codeSnapshot: z.string().min(1, "code is required")
 });

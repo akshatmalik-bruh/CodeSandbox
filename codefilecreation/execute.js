@@ -28,20 +28,6 @@ export const executeCode = (
 
     }
 
-    else if (language === "java") {
-
-      command =
-        `docker run --rm -v "${absolutePath}:/code" openjdk:11 bash -c "javac /code/Main.java && java -cp /code Main"`;
-
-    }
-
-    else if (language === "c++") {
-
-      command =
-        `docker run --rm -v "${absolutePath}:/code" gcc:11 bash -c "g++ /code/main.cpp -o /code/a.out && /code/a.out"`;
-
-    }
-
     else {
 
       return reject(
@@ -58,7 +44,7 @@ export const executeCode = (
       command,
 
       {
-        timeout: 5000,
+        timeout: 10000,
       },
 
       (error, stdout, stderr) => {
@@ -77,22 +63,28 @@ export const executeCode = (
 
         if (error) {
 
-          return reject(
-
+          // Always reject with an Error object so that err.message is
+          // accessible in the Workers.js catch block. Previously this
+          // rejected with a raw string which caused err.message to be
+          // undefined, silently swallowing syntax errors and compile errors.
+          const message =
             cleanedStderr ||
-            error.message
+            (error.killed
+              ? `Execution timed out after ${error.signal || "SIGTERM"}`
+              : error.message);
 
-          );
+          return reject(new Error(message));
 
         }
 
-        resolve(
+        // Include stderr in the resolved value so warnings are visible.
+        const output =
+          [cleanedStdout, cleanedStderr]
+            .filter(Boolean)
+            .join("\n") ||
+          "Execution completed with no output.";
 
-          cleanedStdout ||
-          cleanedStderr ||
-          "Execution completed"
-
-        );
+        resolve(output);
 
       }
 

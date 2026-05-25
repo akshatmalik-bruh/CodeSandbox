@@ -4,8 +4,6 @@ import { FilePlus2, Loader2, X } from "lucide-react";
 const starterCode = {
   javascript: "console.log('Hello');\n",
   python: "print('Hello')\n",
-  java: "public class Main {\n  public static void main(String[] args) {\n    System.out.println(\"Hello\");\n  }\n}\n",
-  "c++": "#include <iostream>\n\nint main() {\n  std::cout << \"Hello\" << std::endl;\n  return 0;\n}\n",
 };
 
 export const CreateFileModal = ({ isOpen, onClose, onCreate, isCreating }) => {
@@ -65,8 +63,6 @@ export const CreateFileModal = ({ isOpen, onClose, onCreate, isCreating }) => {
         >
           <option value="javascript">JavaScript</option>
           <option value="python">Python</option>
-          <option value="java">Java</option>
-          <option value="c++">C++</option>
         </select>
         {error && <p className="mt-2 font-mono text-sm text-red-300">{error}</p>}
 

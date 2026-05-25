@@ -15,8 +15,6 @@ import { executeCode } from "../codefilecreation/execute.js";
 const extensionMap = {
   javascript: "js",
   python: "py",
-  java: "java",
-  "c++": "cpp",
 };
 
 const runWorker = new Worker(
