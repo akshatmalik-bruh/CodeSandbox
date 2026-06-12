@@ -11,7 +11,7 @@ A online code sandbox and execution platform that supports multiple languages (J
 * **Isolated Runtimes (Sandboxing)**: Utilized **Docker Engine** to dynamically spin up and destroy execution containers (`python:3.9-slim`, `node:20`), establishing secure process boundaries to prevent host-system compromise.
 * **Real-time UX & Auto-Saving**: Implemented a **debounced autosave engine** (900ms) syncing Monaco Editor state to MongoDB (with localStorage fallback). Programmed polling handlers to track worker state changes (`queued` ➔ `running` ➔ `completed`/`failed`) to display stdout, stderr, and performance metrics in real-time.
 * **Robust Validation & Security**: Enforced strict validation schemas across routes and parameters using **Zod**, hashed passwords using **Bcrypt**, secured HTTP headers with **Helmet**, and authorized client requests using custom **JWT middleware**.
-* **Microservices & Background Messaging**: Configured dedicated background workers (via BullMQ and Nodemailer) to process transactional workflows (e.g., registration emails) out-of-band, improving API response times by **~85%**.
+* **Background Messaging and Processing**: Configured dedicated background workers (via BullMQ and Nodemailer) to process transactional workflows (e.g., registration emails , spinning up docker containers)  improving API response times.
 
 ---
 
